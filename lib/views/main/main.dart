@@ -28,17 +28,18 @@ class _OCJAppState extends State<OCJApp> {
   @override
   Widget build(BuildContext context) {
     MaterialColor primaryColor =
-    MaterialColor(0xFF7f6d1e, ColorsUtil().accentColorMap);
+    MaterialColor(0xFF4dc2e3, ColorsUtil.primaryColorMap);
     return MaterialApp(
       title: StringsResource.appTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: primaryColor,
+//          primaryColor: Colors.white,
           textSelectionColor: primaryColor,
           highlightColor: primaryColor,
           hintColor: Colors.white70,
           unselectedWidgetColor: Colors.white70,
-          bottomAppBarColor: Colors.transparent),
+      ),
       home: hasLoaded ? BaseUI() : SplashUI(),
     );
   }

@@ -1,18 +1,22 @@
 import 'dart:ui';
 
 class ColorsUtil {
-  Map<int, Color> accentColorMap = {
-    50: Color(0xFF7f6d1e),
-    100: Color(0xFF7f6d1e),
-    200: Color(0xFF7f6d1e),
-    300: Color(0xFF7f6d1e),
-    400: Color(0xFF7f6d1e),
-    500: Color(0xFF7f6d1e),
-    600: Color(0xFF7f6d1e),
-    700: Color(0xFF7f6d1e),
-    800: Color(0xFF7f6d1e),
-    900: Color(0xFF7f6d1e),
+  static final Map<int, Color> primaryColorMap = {
+    50: Color(0xFF4dc2e3),
+    100: Color(0xFF4dc2e3),
+    200: Color(0xFF4dc2e3),
+    300: Color(0xFF4dc2e3),
+    400: Color(0xFF4dc2e3),
+    500: Color(0xFF4dc2e3),
+    600: Color(0xFF4dc2e3),
+    700: Color(0xFF4dc2e3),
+    800: Color(0xFF4dc2e3),
+    900: Color(0xFF4dc2e3),
   };
 
-  static final accentColor = const Color(0xFF7f6d1e);
+  static final primaryColor = const Color(0xFF4dc2e3);
+  static final primaryColorDark = const Color(0xFF3f8698);
+  static final colorAccent = const Color(0xFFcef5ff);
+  static final drawerHeaderBase = const Color(0xFF020809);
+
 }

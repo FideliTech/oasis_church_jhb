@@ -1,7 +1,7 @@
-
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:oasis_church_jhb/reources/strings_resource.dart';
+import 'package:oasis_church_jhb/utils/colors_util.dart';
 import 'package:oasis_church_jhb/utils/widget_util.dart';
 import 'package:oasis_church_jhb/views/blog/blog.dart';
 import 'package:oasis_church_jhb/views/drawer/about_us.dart';
@@ -29,9 +29,11 @@ enum DataChangeMode {
 
 class BaseUIState extends State<BaseUI> {
   int currentPageIndex = 0;
+  GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   Widget build(BuildContext context) {
+    scaffoldKey = new GlobalKey<ScaffoldState>();
     final _pages = [
       Home(),
       Sermons(),
@@ -39,21 +41,32 @@ class BaseUIState extends State<BaseUI> {
       Events(),
       Blog(),
     ];
-    final bottomNavSelectedColor = const Color(0xFF7f6d1e);
     return Scaffold(
-      body: _pages[currentPageIndex],
-      backgroundColor: Colors.black45,
+      key: scaffoldKey,
+      body: WidgetUtil().getDrawerGradientContainer(
+          _pages[currentPageIndex]/*, "OCJ",
+          leftIcon: Icons.menu,
+          itemsColor: Colors.black,
+          onLeftIconClick: openDrawer*/),
+      backgroundColor: ColorsUtil.colorAccent,
       appBar: AppBar(
+        elevation: 0.5,
         title: Text(
-            StringsResource.appTitle),
+            StringsResource.appTitle,),
         centerTitle: true,
-        backgroundColor: Colors.white10,
+        backgroundColor: ColorsUtil.colorAccent,
       ),
-      drawer: WidgetUtil()
-          .getDrawer(_onConnectWithUsClick,_onGiveClick,_onLocateUsClick,_onPrivacyPolicyClick,_onAboutUsClick,_onSettingsClick),
+
+      drawer: WidgetUtil().getDrawer(
+          _onConnectWithUsClick,
+          _onGiveClick,
+          _onLocateUsClick,
+          _onPrivacyPolicyClick,
+          _onAboutUsClick,
+          _onSettingsClick),
       bottomNavigationBar: BubbleBottomBar(
         opacity: .2,
-        backgroundColor: Colors.black87,
+        backgroundColor: ColorsUtil.primaryColorDark,
         currentIndex: currentPageIndex,
         onTap: (int index) {
           setState(() {
@@ -71,58 +84,58 @@ class BaseUIState extends State<BaseUI> {
         //optional, uses theme color if not specified
         items: <BubbleBottomBarItem>[
           BubbleBottomBarItem(
-              backgroundColor: bottomNavSelectedColor,
+              backgroundColor: ColorsUtil.colorAccent,
               icon: Icon(
                 Icons.home,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               activeIcon: Icon(
                 Icons.home,
-                color: bottomNavSelectedColor,
+                color: ColorsUtil.colorAccent,
               ),
               title: Text(StringsResource.home)),
           BubbleBottomBarItem(
-              backgroundColor: bottomNavSelectedColor,
+              backgroundColor: ColorsUtil.colorAccent,
               icon: Icon(
                 Icons.record_voice_over,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               activeIcon: Icon(
                 Icons.record_voice_over,
-                color: bottomNavSelectedColor,
+                color: ColorsUtil.colorAccent,
               ),
               title: Text(StringsResource.sermons)),
           BubbleBottomBarItem(
-              backgroundColor: bottomNavSelectedColor,
+              backgroundColor: ColorsUtil.colorAccent,
               icon: Icon(
                 Icons.card_giftcard,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               activeIcon: Icon(
                 Icons.card_giftcard,
-                color: bottomNavSelectedColor,
+                color: ColorsUtil.colorAccent,
               ),
               title: Text(StringsResource.give)),
           BubbleBottomBarItem(
-              backgroundColor: bottomNavSelectedColor,
+              backgroundColor: ColorsUtil.colorAccent,
               icon: Icon(
                 Icons.event,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               activeIcon: Icon(
                 Icons.event,
-                color: bottomNavSelectedColor,
+                color: ColorsUtil.colorAccent,
               ),
               title: Text(StringsResource.events)),
           BubbleBottomBarItem(
-              backgroundColor: bottomNavSelectedColor,
+              backgroundColor: ColorsUtil.colorAccent,
               icon: Icon(
                 Icons.chat,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               activeIcon: Icon(
                 Icons.chat,
-                color: bottomNavSelectedColor,
+                color: ColorsUtil.colorAccent,
               ),
               title: Text(StringsResource.blog)),
         ],
@@ -165,5 +178,9 @@ class BaseUIState extends State<BaseUI> {
     Navigator.of(context).pop();
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) => AboutUs()));
+  }
+
+  void openDrawer() {
+    scaffoldKey.currentState.openDrawer();
   }
 }
