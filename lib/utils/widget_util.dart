@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oasis_church_jhb/models/ConnectMethod.dart';
 import 'package:oasis_church_jhb/models/Sermon.dart';
 import 'package:oasis_church_jhb/reources/dimens.dart';
 import 'package:oasis_church_jhb/reources/strings_resource.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'colors_util.dart';
 
@@ -34,6 +36,37 @@ class WidgetUtil {
   Widget getSpeakerImage(Sermon sermon) {
     return Container(
       child: speakerImage(sermon.graphicLink),
+    );
+  }
+
+  static Widget getSpeakerItem(Sermon sermon, Function onClick) {
+    Widget speakerImage = WidgetUtil().getSpeakerImage(sermon);
+    Widget detailsView = WidgetUtil().sermonTileDetail(sermon);
+
+    return GestureDetector(
+      child: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            speakerImage,
+            detailsView,
+          ],
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(const Radius.circular(60.0)),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.65, 1],
+            colors: [
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+            ],
+          ),
+        ),
+      ),
+      onTap: onClick,
     );
   }
 
@@ -227,13 +260,7 @@ class WidgetUtil {
     );
   }
 
-  Widget getDrawerGradientContainer(Widget child/*, String title,
-      {IconData leftIcon,
-      IconData rightIcon,
-      String subTitle,
-      Color itemsColor,
-      Function onLeftIconClick,
-      Function onRightIconClick}*/) {
+  Widget getBaseGradientContainer(Widget child) {
     return Stack(
       children: <Widget>[
         Container(
@@ -254,13 +281,6 @@ class WidgetUtil {
           ),
           child: child,
         ),
-//        WidgetUtil.getCustomAppBar(title,
-//            subTitle: subTitle,
-//            rightIcon: rightIcon,
-//            leftIcon: leftIcon,
-//            itemsColor: itemsColor,
-//            onLeftIconClick: onLeftIconClick,
-//            onRightIconClick: onRightIconClick),
       ],
     );
   }
@@ -358,6 +378,95 @@ class WidgetUtil {
           ),
           onPressed: onPrimaryButtonClick),
     ));
+  }
+
+  static Widget getConnectHeaderImage() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          image: DecorationImage(
+              image: AssetImage("assets/images/ocj_logo_color.png"),
+              fit: BoxFit.contain)),
+    );
+  }
+
+  Widget connectTileDetail(ConnectMethod connectMethod) {
+    var methodName = Text(
+      connectMethod.methodName,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16.0),
+    );
+
+    return Padding(
+        padding: EdgeInsets.all(Dimens.baseMargin),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            methodName,
+          ],
+        ));
+  }
+
+  Widget getConnectImage(ConnectMethod connectMethod) {
+    return Stack(children: <Widget>[
+      CircleAvatar(
+        radius: 35.0,
+        backgroundColor: ColorsUtil.primaryColorDark,
+      ),
+      CircleAvatar(
+        radius: 34.0,
+        backgroundImage: AssetImage(connectMethod.graphicLink),
+      )
+    ]);
+  }
+
+  static Widget getConnectButton(ConnectMethod connectMethod) {
+    Widget methodImage = WidgetUtil().getConnectImage(connectMethod);
+    Widget detailsView = WidgetUtil().connectTileDetail(connectMethod);
+
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.only(top: Dimens.sideMargin),
+        child: Padding(
+          padding: EdgeInsets.all(Dimens.sideMargin),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              methodImage,
+              detailsView,
+            ],
+          ),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(const Radius.circular(20.0)),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.65, 1],
+            colors: [
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+              ColorsUtil.primaryColorDark.withOpacity(0.2),
+            ],
+          ),
+        ),
+      ),
+      onTap: () => _launchURL(connectMethod.urlLink),
+    );
+  }
+
+  static _launchURL(String url) async {
+    if(url.isNotEmpty) {
+      if (await canLaunch(url)) {
+        await launch(url, forceWebView: true);
+      } else {
+        print("FU");
+        throw 'Could not launch $url';
+      }
+    }else{
+      //todo Navigate to connect screen
+    }
   }
 
   Widget getPaddedWidget(Widget widget) {
@@ -525,7 +634,7 @@ class WidgetUtil {
     }
 
     return Padding(
-      padding: EdgeInsets.all(Dimens.baseMargin),
+      padding: EdgeInsets.all(0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -545,20 +654,20 @@ class WidgetUtil {
               ),
             ),
           ),
-      Padding(
-        padding: EdgeInsets.all(Dimens.mediumMargin),
-        child:Column(
-            children: <Widget>[
-              Text(
-                title.toUpperCase(),
-                style: TextStyle(
-                    color: itemsColor.withOpacity(0.8),
-                    fontSize: subTitle == "" ? 20.0 : 14.0,
-                    fontWeight: FontWeight.w400),
-              ),
-              Text(subTitle, style: TextStyle(color: itemsColor)),
-            ],
-          ),
+          Padding(
+            padding: EdgeInsets.all(Dimens.mediumMargin),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  title.toUpperCase(),
+                  style: TextStyle(
+                      color: itemsColor.withOpacity(0.8),
+                      fontSize: subTitle == "" ? 20.0 : 14.0,
+                      fontWeight: FontWeight.w400),
+                ),
+                Text(subTitle, style: TextStyle(color: itemsColor)),
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.topRight,
@@ -581,24 +690,38 @@ class WidgetUtil {
 
   static Widget getWordOfTheDayWidget(String verse, String verseNumber) {
     return Container(
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.all(Dimens.largeMargin),
-          child: Column(
-            children: <Widget>[
-              Text(
-                "\"" + verse + "\"",
-                style: TextStyle(
-                    fontStyle: FontStyle.italic, color: ColorsUtil.colorAccent),
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: Dimens.largeMargin,
+            left: Dimens.largeMargin,
+            right: Dimens.largeMargin),
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: ListView(
+                  children: <Widget>[
+                    Text(
+                      "\"" + verse + "\"",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic, color: Colors.black),
+                    ),
+                    SizedBox(height: 16.0),
+                    Center(
+                      child: Text(
+                        verseNumber,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 16.0),
-              Text(
-                verseNumber,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       decoration: BoxDecoration(
@@ -617,14 +740,15 @@ class WidgetUtil {
     );
   }
 
-  static Widget getHomeScreenWidget(Sermon sermon) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: 150.0,
-            child: Stack(
-              children: <Widget>[
+  static Widget getHomeScreenPlayer(Sermon sermon) {
+    return Center(
+      child: Container(
+        child: ListView(
+          children: <Widget>[
+            Container(
+              height: 150.0,
+              child: Stack(
+                children: <Widget>[
 //                sermon.graphicLink.isEmpty
 //                    ? WidgetUtil.getBigEmptySpeaker()
 //                    : Container(
@@ -634,7 +758,7 @@ class WidgetUtil {
 //                          image: AssetImage(sermon.graphicLink),
 //                          fit: BoxFit.cover)),
 //                ),
-                Container(
+                  Container(
 //                  decoration: BoxDecoration(
 //                    gradient: LinearGradient(
 //                        colors: [
@@ -644,85 +768,85 @@ class WidgetUtil {
 //                        begin: Alignment.topCenter,
 //                        end: Alignment.bottomCenter),
 //                  ),
-                    ),
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      // SizedBox(height: 52.0),
+                      ),
+                  Center(
+                    child: Column(
+                      children: <Widget>[
+                        // SizedBox(height: 52.0),
 
-                      Spacer(),
-                      Text(sermon.title,
+                        Spacer(),
+                        Text(sermon.title,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32.0)),
+                        SizedBox(
+                          height: 6.0,
+                        ),
+                        Text(
+                          sermon.speaker,
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32.0)),
-                      SizedBox(
-                        height: 6.0,
-                      ),
-                      Text(
-                        sermon.speaker,
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 18.0),
-                      ),
-                      SizedBox(height: 16.0),
-                    ],
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: 18.0),
+                        ),
+                        SizedBox(height: 16.0),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+//              SizedBox(height: 42.0),
+            Slider(
+              onChanged: (double value) {},
+              value: 0.2,
+              activeColor: ColorsUtil.primaryColor,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    '2:10',
+                    style: TextStyle(color: Colors.black.withOpacity(0.7)),
                   ),
+                  Text('-03:56',
+                      style: TextStyle(color: Colors.black.withOpacity(0.7)))
+                ],
+              ),
+            ),
+            //Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.fast_rewind,
+                  color: Colors.white54,
+                  size: 42.0,
+                ),
+                SizedBox(width: 32.0),
+                Container(
+                    decoration: BoxDecoration(
+                        color: ColorsUtil.primaryColor,
+                        borderRadius: BorderRadius.circular(50.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.play_arrow,
+                        size: 58.0,
+                        color: Colors.white,
+                      ),
+                    )),
+                SizedBox(width: 32.0),
+                Icon(
+                  Icons.fast_forward,
+                  color: Colors.white54,
+                  size: 42.0,
                 )
               ],
             ),
-          ),
-//              SizedBox(height: 42.0),
-          Slider(
-            onChanged: (double value) {},
-            value: 0.2,
-            activeColor: ColorsUtil.primaryColor,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '2:10',
-                  style: TextStyle(color: Colors.white.withOpacity(0.7)),
-                ),
-                Text('-03:56',
-                    style: TextStyle(color: Colors.white.withOpacity(0.7)))
-              ],
-            ),
-          ),
-          //Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.fast_rewind,
-                color: Colors.white54,
-                size: 42.0,
-              ),
-              SizedBox(width: 32.0),
-              Container(
-                  decoration: BoxDecoration(
-                      color: ColorsUtil.primaryColor,
-                      borderRadius: BorderRadius.circular(50.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.play_arrow,
-                      size: 58.0,
-                      color: Colors.white,
-                    ),
-                  )),
-              SizedBox(width: 32.0),
-              Icon(
-                Icons.fast_forward,
-                color: Colors.white54,
-                size: 42.0,
-              )
-            ],
-          ),
-          //Spacer(),
+            //Spacer(),
 //              Row(
 //                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //                children: <Widget>[
@@ -740,22 +864,36 @@ class WidgetUtil {
 //                  ),
 //                ],
 //              ),
-          SizedBox(height: 58.0),
-        ],
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(const Radius.circular(32.0)),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0.1, 0.65, 1],
-          colors: [
-            ColorsUtil.primaryColorDark.withOpacity(0.6),
-            ColorsUtil.primaryColorDark.withOpacity(0.4),
-            ColorsUtil.primaryColorDark.withOpacity(0.0),
+            SizedBox(height: 58.0),
           ],
         ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(const Radius.circular(32.0)),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.1, 0.65, 1],
+            colors: [
+              ColorsUtil.primaryColorDark.withOpacity(0.6),
+              ColorsUtil.primaryColorDark.withOpacity(0.4),
+              ColorsUtil.primaryColorDark.withOpacity(0.0),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+
+  getOCJAppBar(String appTitle) {
+    return AppBar(
+      elevation: 0.5,
+      iconTheme: IconThemeData(color: Colors.black),
+      title: Text(
+        appTitle,
+      ),
+      centerTitle: true,
+      brightness: Brightness.light,
+      backgroundColor: ColorsUtil.colorAccent,
     );
   }
 }

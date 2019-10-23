@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oasis_church_jhb/models/Sermon.dart';
+import 'package:oasis_church_jhb/reources/dimens.dart';
 import 'package:oasis_church_jhb/reources/strings_resource.dart';
 import 'package:oasis_church_jhb/utils/colors_util.dart';
 import 'package:oasis_church_jhb/utils/strings_util.dart';
@@ -31,11 +32,20 @@ class _HomeState extends State<Home> {
   }
 
   Widget getBody() {
-    return ListView(
+    return Column(
       children: <Widget>[
-        WidgetUtil.getWordOfTheDayWidget(
-            StringsResource.verseTest, StringsResource.verseNumTest),
-        WidgetUtil.getHomeScreenWidget(_sermon)
+        Flexible(
+          flex: 2,
+          child: WidgetUtil.getWordOfTheDayWidget(
+              StringsResource.verseTest, StringsResource.verseNumTest),
+        ),
+        Flexible(
+          flex: 5,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: Dimens.baseMargin),
+            child: WidgetUtil.getHomeScreenPlayer(_sermon),
+          ),
+        )
       ],
     );
   }

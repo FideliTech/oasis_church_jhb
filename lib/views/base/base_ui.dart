@@ -5,6 +5,10 @@ import 'package:oasis_church_jhb/utils/colors_util.dart';
 import 'package:oasis_church_jhb/utils/widget_util.dart';
 import 'package:oasis_church_jhb/views/blog/blog.dart';
 import 'package:oasis_church_jhb/views/drawer/about_us.dart';
+import 'package:oasis_church_jhb/views/drawer/connect.dart';
+import 'package:oasis_church_jhb/views/drawer/locate_us.dart';
+import 'package:oasis_church_jhb/views/drawer/privacy.dart';
+import 'package:oasis_church_jhb/views/drawer/settings.dart';
 import 'package:oasis_church_jhb/views/events/events.dart';
 import 'package:oasis_church_jhb/views/give/give.dart';
 import 'package:oasis_church_jhb/views/home/home.dart';
@@ -43,20 +47,9 @@ class BaseUIState extends State<BaseUI> {
     ];
     return Scaffold(
       key: scaffoldKey,
-      body: WidgetUtil().getDrawerGradientContainer(
-          _pages[currentPageIndex]/*, "OCJ",
-          leftIcon: Icons.menu,
-          itemsColor: Colors.black,
-          onLeftIconClick: openDrawer*/),
+      body: WidgetUtil().getBaseGradientContainer(_pages[currentPageIndex]),
       backgroundColor: ColorsUtil.colorAccent,
-      appBar: AppBar(
-        elevation: 0.5,
-        title: Text(
-            StringsResource.appTitle,),
-        centerTitle: true,
-        backgroundColor: ColorsUtil.colorAccent,
-      ),
-
+      appBar: WidgetUtil().getOCJAppBar(StringsResource.appTitle),
       drawer: WidgetUtil().getDrawer(
           _onConnectWithUsClick,
           _onGiveClick,
@@ -153,13 +146,13 @@ class BaseUIState extends State<BaseUI> {
   void _onPrivacyPolicyClick() {
     Navigator.of(context).pop();
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => AboutUs()));
+        .push(MaterialPageRoute(builder: (BuildContext context) => PrivacyPolicy()));
   }
 
   void _onLocateUsClick() {
     Navigator.of(context).pop();
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => AboutUs()));
+        .push(MaterialPageRoute(builder: (BuildContext context) => LocateUs()));
   }
 
   void _onGiveClick() {
@@ -171,13 +164,13 @@ class BaseUIState extends State<BaseUI> {
   void _onConnectWithUsClick() {
     Navigator.of(context).pop();
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => AboutUs()));
+        .push(MaterialPageRoute(builder: (BuildContext context) => Connect()));
   }
 
   void _onSettingsClick() {
     Navigator.of(context).pop();
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => AboutUs()));
+        .push(MaterialPageRoute(builder: (BuildContext context) => Settings()));
   }
 
   void openDrawer() {

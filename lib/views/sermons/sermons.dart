@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oasis_church_jhb/models/Sermon.dart';
-import 'package:oasis_church_jhb/reources/dimens.dart';
-import 'package:oasis_church_jhb/utils/colors_util.dart';
 import 'package:oasis_church_jhb/utils/strings_util.dart';
 import 'package:oasis_church_jhb/utils/widget_util.dart';
 import 'package:oasis_church_jhb/views/sermons/sermon_playback.dart';
@@ -100,55 +98,23 @@ class _SermonsState extends State<Sermons> {
         itemBuilder: (BuildContext context, int position) {
           if (_sermons.isNotEmpty) {
             return Container(
-//                margin: EdgeInsets.only(
-//                  left: Dimens.baseMargin,
-//                  right: Dimens.baseMargin,
-//                ),
                 child: Card(
-                  borderOnForeground: false,
-                  color: Colors.transparent,
-                  elevation: 0,
-                  child: getSpeakerItem(_sermons[position]),
-                ));
+              borderOnForeground: false,
+              color: Colors.transparent,
+              elevation: 0,
+              child: WidgetUtil.getSpeakerItem(_sermons[position], () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        SermonPlayback(_sermons[position])));
+              }),
+            ));
           } else {
             return null;
           }
         });
   }
 
-  Widget getSpeakerItem(Sermon sermon) {
-    Widget speakerImage = WidgetUtil().getSpeakerImage(sermon);
-    Widget detailsView = WidgetUtil().sermonTileDetail(sermon);
-
-    return GestureDetector(
-      child: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            speakerImage,
-            detailsView,
-          ],
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(const Radius.circular(60.0)),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0.1, 0.65, 1],
-            colors: [
-              ColorsUtil.primaryColorDark.withOpacity(0.2),
-              ColorsUtil.primaryColorDark.withOpacity(0.2),
-              ColorsUtil.primaryColorDark.withOpacity(0.2),
-            ],
-          ),
-        ),
-      ),
-      onTap: () => _navigateToPlaySermon(sermon),
-    );
-  }
-
   void _navigateToPlaySermon(Sermon sermon) {
-//    Navigator.of(context).pop();
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => SermonPlayback(sermon)));
   }

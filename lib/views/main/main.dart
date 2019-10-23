@@ -28,17 +28,20 @@ class _OCJAppState extends State<OCJApp> {
   @override
   Widget build(BuildContext context) {
     MaterialColor primaryColor =
-    MaterialColor(0xFF4dc2e3, ColorsUtil.primaryColorMap);
+        MaterialColor(0xFF4dc2e3, ColorsUtil.primaryColorMap);
     return MaterialApp(
       title: StringsResource.appTitle,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: primaryColor,
-//          primaryColor: Colors.white,
-          textSelectionColor: primaryColor,
-          highlightColor: primaryColor,
-          hintColor: Colors.white70,
-          unselectedWidgetColor: Colors.white70,
+        primarySwatch: primaryColor,
+        primaryColor: Colors.blue,
+        fontFamily: 'Quicksand',
+        textSelectionColor: primaryColor,
+        primaryTextTheme: TextTheme(title: TextStyle(color: Colors.black)),
+//        appBarTheme: AppBarTheme(brightness: Brightness.light),
+        highlightColor: primaryColor,
+        hintColor: Colors.white70,
+        unselectedWidgetColor: Colors.white70,
       ),
       home: hasLoaded ? BaseUI() : SplashUI(),
     );
@@ -50,4 +53,3 @@ class _OCJAppState extends State<OCJApp> {
     _timer.cancel();
   }
 }
-

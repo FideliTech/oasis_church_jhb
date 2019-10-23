@@ -4,7 +4,7 @@ import 'package:oasis_church_jhb/reources/strings_resource.dart';
 import 'package:oasis_church_jhb/utils/widget_util.dart';
 
 // ignore: must_be_immutable
-class Settings extends StatelessWidget {
+class PrivacyPolicy extends StatelessWidget {
   final _minimumPadding = 8.0;
   BuildContext _buildContext;
 
@@ -19,7 +19,7 @@ class Settings extends StatelessWidget {
           centerTitle: true,
           title: Text(StringsResource.aboutAppTitle),
           leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(Icons.arrow_back, color: Colors.black,),
               onPressed: () {
                 moveToPreviousScreen(true);
               }),

@@ -29,10 +29,9 @@ class _SermonPlaybackState extends State<SermonPlayback> {
           backgroundColor: ColorsUtil.primaryColorDark,
           body: Stack(
             children: <Widget>[
-              ListView(
+              Column(
                 children: <Widget>[
-                  Container(
-                    height: 400.0,
+                  Expanded(
                     child: Stack(
                       children: <Widget>[
                         image.isEmpty
@@ -105,34 +104,37 @@ class _SermonPlaybackState extends State<SermonPlayback> {
                     ),
                   ),
                   //Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.fast_rewind,
-                        color: Colors.white54,
-                        size: 42.0,
-                      ),
-                      SizedBox(width: 32.0),
-                      Container(
-                          decoration: BoxDecoration(
-                              color: ColorsUtil.primaryColor,
-                              borderRadius: BorderRadius.circular(50.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.play_arrow,
-                              size: 58.0,
-                              color: Colors.white,
-                            ),
-                          )),
-                      SizedBox(width: 32.0),
-                      Icon(
-                        Icons.fast_forward,
-                        color: Colors.white54,
-                        size: 42.0,
-                      )
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(bottom: Dimens.xlargeMargin),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.fast_rewind,
+                          color: Colors.white54,
+                          size: 42.0,
+                        ),
+                        SizedBox(width: 32.0),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: ColorsUtil.primaryColor,
+                                borderRadius: BorderRadius.circular(50.0)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.play_arrow,
+                                size: 58.0,
+                                color: Colors.white,
+                              ),
+                            )),
+                        SizedBox(width: 32.0),
+                        Icon(
+                          Icons.fast_forward,
+                          color: Colors.white54,
+                          size: 42.0,
+                        )
+                      ],
+                    ),
                   ),
                   //Spacer(),
 //              Row(
@@ -152,16 +154,18 @@ class _SermonPlaybackState extends State<SermonPlayback> {
 //                  ),
 //                ],
 //              ),
-                  SizedBox(height: 58.0),
+                  //SizedBox(height: 58.0),
                 ],
               ),
-              WidgetUtil.getCustomAppBar("Playlist",
-                  subTitle: "Best Vibes of the week",
-                  rightIcon: Icons.playlist_add,
-                  leftIcon: Icons.arrow_back_ios,
-                  itemsColor: Colors.white,
-                  onLeftIconClick: _onBackPressed,
-                  onRightIconClick: _onAddToPlaylistPressed),
+              SafeArea(
+                child: WidgetUtil.getCustomAppBar("Sunday Service",
+                    subTitle: "06-01-2018",
+                    rightIcon: Icons.playlist_add,
+                    leftIcon: Icons.arrow_back_ios,
+                    itemsColor: Colors.white,
+                    onLeftIconClick: _onBackPressed,
+                    onRightIconClick: _onAddToPlaylistPressed),
+              ),
             ],
           ),
         ),

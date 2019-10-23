@@ -21,7 +21,7 @@ class AboutUs extends StatelessWidget {
           elevation: 0.5,
           title: Text(StringsResource.aboutAppTitle),
           leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(Icons.arrow_back, color: Colors.black,),
               onPressed: () {
                 moveToPreviousScreen(true);
               }),
@@ -37,8 +37,11 @@ class AboutUs extends StatelessWidget {
   }
 
   Widget getDetailsScreen() {
-    return ListView(
-      children: <Widget>[getTextWidget(), getButtonRow()],
+    return Column(
+      children: <Widget>[
+        Flexible(flex: 7, fit: FlexFit.tight,child: ListView(children: <Widget>[getTextWidget()])),
+        Flexible(flex: 1, fit: FlexFit.tight, child: getButtonRow())
+      ],
     );
   }
 
@@ -54,13 +57,12 @@ class AboutUs extends StatelessWidget {
 
   Widget getButtonRow() {
     return Padding(
-      padding: EdgeInsets.all(_minimumPadding),
+      padding: EdgeInsets.all(_minimumPadding*0.5),
       child: Row(
         children: <Widget>[
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(
-                  left: _minimumPadding, right: _minimumPadding),
+              margin: EdgeInsets.all(_minimumPadding),
               child: RaisedButton(
                   color: ColorsUtil.primaryColorDark,
                   shape: RoundedRectangleBorder(
@@ -68,9 +70,8 @@ class AboutUs extends StatelessWidget {
                           color: Theme.of(_buildContext).accentColor),
                       borderRadius: BorderRadius.circular(32)),
                   textColor: ColorsUtil.colorAccent,
-                  child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: Dimens.sideMargin),
+                  child: Container(
+                      margin: EdgeInsets.symmetric(vertical: Dimens.sideMargin),
                       child: Text(
                         StringsResource.done,
                         textScaleFactor: 1.5,
